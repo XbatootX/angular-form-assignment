@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import{FormGroup,FormControl, Validators, ReactiveFormsModule} from '@angular/forms';
 import { matchpassword } from './matchpassword.validator';
 
@@ -8,7 +8,7 @@ import { matchpassword } from './matchpassword.validator';
   templateUrl: './signup-component.component.html',
   styleUrls: ['./signup-component.component.css']
 })
-export class SignupComponentComponent {
+export class SignupComponentComponent implements OnInit{
   form = new FormGroup({
     
     firstName: new FormControl('', [
@@ -34,6 +34,20 @@ export class SignupComponentComponent {
     }, {
       validators:matchpassword
     });
+    ngOnInit() {
+      const savedFormData = localStorage.getItem('form_data');
+      if (savedFormData) {
+        this.form.setValue(JSON.parse(savedFormData));
+      }
+    }
+
+    onSubmit() {
+      if (this.form.valid) {
+        const formData = this.form.value;
+        console.log(formData);
+        localStorage.setItem('form_data', JSON.stringify(formData));
+      }
+    }
 
    country: string[]=['England', 'Egypt', 'USA', 'India']
    city: string[]=[]
